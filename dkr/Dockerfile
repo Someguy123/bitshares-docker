@@ -14,7 +14,7 @@ EXPOSE 7777
 EXPOSE 5000
 EXPOSE 8090
 
-ARG bitsharesd_version=0.1.8
+ARG bitsharesd_version=2.0.171212
 
 RUN cd ~ && \
 	git clone https://github.com/bitshares/bitshares-2 && \
