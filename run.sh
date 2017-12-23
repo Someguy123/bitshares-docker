@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# Peerplays node manager
+# Bitshares node manager
 # Released under GNU AGPL by Someguy123
 #
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOCKER_DIR="$DIR/dkr"
 DATADIR="$DIR/data"
-DOCKER_NAME="peerplays"
+DOCKER_NAME="bitshares"
 
 BOLD="$(tput bold)"
 RED="$(tput setaf 1)"
@@ -43,16 +43,16 @@ help() {
     echo "Usage: $0 COMMAND [DATA]"
     echo
     echo "Commands: "
-    echo "    start - starts peerplays container"
-    echo "    replay - starts peerplays container (in replay mode)"
+    echo "    start - starts bitshares container"
+    echo "    replay - starts bitshares container (in replay mode)"
     echo "    shm_size - resizes /dev/shm to size given, e.g. ./run.sh shm_size 10G "
-    echo "    stop - stops peerplays container"
-    echo "    status - show status of peerplays container"
-    echo "    restart - restarts peerplays container"
+    echo "    stop - stops bitshares container"
+    echo "    status - show status of bitshares container"
+    echo "    restart - restarts bitshares container"
     echo "    install - pulls latest docker image from server (no compiling)"
-    echo "    rebuild - builds peerplays container (from docker file), and then restarts it"
-    echo "    build - only builds peerplays container (from docker file)"
-    echo "    logs - show all logs inc. docker logs, and peerplays logs"
+    echo "    rebuild - builds bitshares container (from docker file), and then restarts it"
+    echo "    build - only builds bitshares container (from docker file)"
+    echo "    logs - show all logs inc. docker logs, and bitshares logs"
     echo "    wallet - open cli_wallet in the container"
     echo "    enter - enter a bash session in the container"
     echo
@@ -63,17 +63,17 @@ help() {
 build() {
     echo $GREEN"Building docker container"$RESET
     cd $DOCKER_DIR
-    docker build -t peerplays .
+    docker build -t bitshares .
 }
 
 install() {
-    # step 1, get rid of old peerplays
-    echo "Stopping and removing any existing peerplays containers"
-    docker stop peerplays
-    echo "Loading image from someguy123/peerplays"
-    docker pull someguy123/peerplays
-    echo "Tagging as peerplays"
-    docker tag someguy123/peerplays peerplays
+    # step 1, get rid of old bitshares
+    echo "Stopping and removing any existing bitshares containers"
+    docker stop bitshares
+    echo "Loading image from someguy123/bitshares"
+    docker pull someguy123/bitshares
+    echo "Tagging as bitshares"
+    docker tag someguy123/bitshares bitshares
     echo "Installation completed. You may now configure or run the server"
 }
 
@@ -101,15 +101,15 @@ start() {
     if [[ $? == 0 ]]; then
         docker start $DOCKER_NAME
     else
-        docker run ${DPORTS[@]} -v /dev/shm:/shm -v "$DATADIR":/peerplays -d --name $DOCKER_NAME -t peerplays
+        docker run ${DPORTS[@]} -v /dev/shm:/shm -v "$DATADIR":/bitshares -d --name $DOCKER_NAME -t bitshares
     fi
 }
 
 replay() {
     echo "Removing old container"
     docker rm $DOCKER_NAME
-    echo "Running peerplays with replay..."
-    docker run ${DPORTS[@]} -v /dev/shm:/shm -v "$DATADIR":/peerplays -d --name $DOCKER_NAME -t peerplays witness_node --replay
+    echo "Running bitshares with replay..."
+    docker run ${DPORTS[@]} -v /dev/shm:/shm -v "$DATADIR":/bitshares -d --name $DOCKER_NAME -t bitshares witness_node --replay
     echo "Started."
 }
 
