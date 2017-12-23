@@ -105,6 +105,17 @@ start() {
     fi
 }
 
+install_docker() {
+    sudo apt update
+    sudo apt install curl git
+    curl https://get.docker.com | sh
+    if [ "$EUID" -ne 0 ]; then
+        echo "Adding user $(whoami) to docker group"
+        sudo usermod -aG docker $(whoami)
+        echo "IMPORTANT: Please re-login (or close and re-connect SSH) for docker to function correctly"
+    fi
+}
+
 replay() {
     echo "Removing old container"
     docker rm $DOCKER_NAME
@@ -184,6 +195,9 @@ case $1 in
         ;;
     stop)
         stop
+        ;;
+    install_docker)
+        install_docker 
         ;;
     restart)
         stop
